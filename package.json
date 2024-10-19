@@ -1,0 +1,36 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sst-dev": "sst dev",
+    "sst-deploy": "sst deploy --stage production",
+    "sst-remove": "sst remove --stage production",
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "postinstall": "nuxt prepare",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.675.0",
+    "@aws-sdk/client-dynamodb": "^3.675.0",
+    "@aws-sdk/client-s3": "^3.651.1",
+    "@aws-sdk/s3-request-presigner": "^3.651.1",
+    "@nuxt/fonts": "^0.10.0",
+    "@nuxt/kit": "^3.13.2",
+    "@nuxt/schema": "^3.13.2",
+    "@nuxt/ui": "^2.18.7",
+    "aws-lambda": "^1.0.7",
+    "nuxt": "^3.13.2",
+    "nuxt-socket-io": "^3.0.13",
+    "nuxt3-socket.io": "^0.3.1",
+    "sass": "^1.80.2",
+    "sst": "^3.2.30",
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.5"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.145"
+  }
+}

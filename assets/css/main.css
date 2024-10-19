@@ -1,0 +1,10 @@
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-image: url(~/assets/images/bg.png);
+  background-repeat: repeat;
+}
+
+#__nuxt {
+  height: 100%;
+}
