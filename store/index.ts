@@ -1,3 +1,6 @@
 import { reactive } from "vue";
 
-export const store = reactive({ username: "" });
+export const store = reactive({
+  username: "",
+  activeSession: false,
+});

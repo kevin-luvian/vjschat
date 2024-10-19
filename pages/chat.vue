@@ -1,17 +1,9 @@
 <template>
-    <div class="container mx-auto flex items-center justify-between">
-        <p class="logo-text">Nuxt<span>Chat</span></p>
-        <div class="flex">
-            <UAvatar style="background-color: white;" :src="`https://robohash.org/${store.username}`" alt="Avatar" />
-            <p class="ml-2 self-center">{{ store.username }}</p>
-        </div>
-    </div>
     <div class="content">
         <div class="user-container">
             <h2 class="mb-3">Users</h2>
             <span class="sidebar-user" v-for="name in usernames">
-                <UAvatar style="background-color: white; border: #00dc82 solid 1px"
-                    :src="`https://robohash.org/${name}`" alt="Avatar" />
+                <Avatar :username="name" active />
                 <p class="ml-3">{{ name }}</p>
             </span>
         </div>
@@ -19,9 +11,8 @@
         <div class="chat-container">
             <div class="messages">
                 <span v-for="message in messages">
-                    <ChatBox class="mb-5" :avatar="`https://robohash.org/${message.username}`"
-                        :username="message.username" :message="message.message"
-                        :self="store.username == message.username" />
+                    <ChatBox class="mb-5" :active="usernames.includes(message.username)" :username="message.username"
+                        :message="message.message" :self="store.username == message.username" />
                 </span>
             </div>
             <div class="textbox">
@@ -38,6 +29,7 @@
 import { store } from '~/store'
 import { useWebSocket } from '~/composables/useWebSocket'
 import ChatBox from '~/components/ChatBox.vue'
+import Avatar from '~/components/Avatar.vue'
 import { ref } from 'vue'
 import { useHead } from '@unhead/vue'
 
@@ -70,6 +62,7 @@ watch([data, users], async () => {
 
 const inputValue = ref('')
 const onInputSubmit = () => {
+    if (inputValue.value == '') return
     sendMessage(inputValue.value)
     inputValue.value = ''
 }

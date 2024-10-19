@@ -12,7 +12,7 @@
     </div>
     <div v-else class="chat-box">
         <div class="avatar">
-            <img :src="avatar" alt="User Avatar" />
+            <Avatar :active="active" :username="username" />
         </div>
         <div class="chat-content">
             <div class="chat-header">
@@ -27,11 +27,12 @@
 </template>
 
 <script setup>
+import Avatar from '~/components/Avatar.vue';
 import { ref } from 'vue'
 
 const props = defineProps({
-    avatar: {
-        type: String,
+    active: {
+        type: Boolean,
         required: true,
     },
     username: {
