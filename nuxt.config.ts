@@ -4,9 +4,12 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-07-11",
   nitro: {
     preset: "aws-lambda",
+    experimental: {
+      websocket: true,
+    },
   },
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
-  modules: ["nuxt3-socket.io", "@nuxt/fonts", "@nuxt/ui"],
+  modules: ["@nuxt/fonts", "@nuxt/ui"],
   ignore: ["packages/**"],
 });

@@ -2,26 +2,26 @@
     <div class="container mx-auto flex items-center justify-between">
         <p class="logo-text">Nuxt<span>Chat</span></p>
         <div class="flex">
-            <p class="mr-2 self-center">{{ store.username }}</p>
             <UAvatar style="background-color: white;" :src="`https://robohash.org/${store.username}`" alt="Avatar" />
+            <p class="ml-2 self-center">{{ store.username }}</p>
         </div>
     </div>
     <div class="content">
         <div class="user-container">
-            <h2>Users</h2>
-            <ul class="user-list">
-                <li>User 1</li>
-                <li>User 2</li>
-                <li>User 3</li>
-            </ul>
+            <h2 class="mb-3">Users</h2>
+            <span class="sidebar-user" v-for="name in usernames">
+                <UAvatar style="background-color: white; border: #00dc82 solid 1px"
+                    :src="`https://robohash.org/${name}`" alt="Avatar" />
+                <p class="ml-3">{{ name }}</p>
+            </span>
         </div>
 
         <div class="chat-container">
             <div class="messages">
                 <span v-for="message in messages">
-                    <div :class="(store.username == message.username) ? 'my-message' : ''">
-                        {{ message.message }}
-                    </div>
+                    <ChatBox class="mb-5" :avatar="`https://robohash.org/${message.username}`"
+                        :username="message.username" :message="message.message"
+                        :self="store.username == message.username" />
                 </span>
             </div>
             <div class="textbox">
@@ -36,22 +36,42 @@
 
 <script setup>
 import { store } from '~/store'
+import { useWebSocket } from '~/composables/useWebSocket'
+import ChatBox from '~/components/ChatBox.vue'
 import { ref } from 'vue'
+import { useHead } from '@unhead/vue'
 
+useHead({ title: 'NuxtChat' })
 watchEffect(() => {
     if (store.username == '') navigateTo('/')
 })
 
+const { connect, sendMessage, users, messages } = useWebSocket({
+    master: true,
+    username: store.username
+});
+const { data, refresh } = await useFetch('/api/getUsers')
+
+onMounted(() => {
+    connect()
+    refresh()
+})
+
+let usernames = ref([]);
+watch([data, users], async () => {
+    let temp = [store.username]
+    if (users.value.length > 0) {
+        temp = temp.concat(...users.value)
+    } else {
+        temp = temp.concat(...data.value)
+    }
+    usernames.value = [...new Set(temp.sort())]
+});
+
 const inputValue = ref('')
-
-const messages = [
-    { username: 'jeb', message: 'hello' },
-    { username: 'bob', message: 'hello too' },
-    { username: 'test', message: 'hello too' },
-]
-
 const onInputSubmit = () => {
-    console.log(inputValue.value);
+    sendMessage(inputValue.value)
+    inputValue.value = ''
 }
 </script>
 
@@ -65,13 +85,13 @@ input {
     max-width: none;
     padding: 1.5rem 5rem;
     height: 84px;
-}
 
-.logo-text {
-    font-size: 1.5em;
+    .logo-text {
+        font-size: 1.5em;
 
-    span {
-        color: #00dc82;
+        span {
+            color: #00dc82;
+        }
     }
 }
 
@@ -86,10 +106,24 @@ input {
 }
 
 .user-container {
-    min-width: 20rem;
-    background-color: #f4f4f4;
+    min-width: 15rem;
+    background-color: white;
     border-right: 1px solid #ccc;
     padding: 1rem 1rem 1rem 5rem;
+
+    h2 {
+        font-weight: bold;
+    }
+
+    .sidebar-user {
+        display: flex;
+        align-items: center;
+        margin-bottom: .5rem;
+
+        img {
+            border: #00dc82 solid 3px !important;
+        }
+    }
 }
 
 .chat-container {

@@ -29,17 +29,13 @@ export default $config({
       handler: "packages/lambda.disconnect",
       link: [socket, table],
     });
-    socket.route("sendMessage", {
-      handler: "packages/lambda.sendMessage",
-      link: [socket, table],
-    });
     socket.route("$default", {
       handler: "packages/lambda.catchAll",
       link: [socket, table],
     });
 
     const web = new sst.aws.Nuxt("web", {
-      link: [socket],
+      link: [socket, table],
     });
 
     return {

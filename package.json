@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "sst-dev": "sst dev",
+    "sst-dev-remove": "sst remove",
     "sst-deploy": "sst deploy --stage production",
     "sst-remove": "sst remove --stage production",
     "build": "nuxt build",
@@ -23,8 +24,6 @@
     "@nuxt/ui": "^2.18.7",
     "aws-lambda": "^1.0.7",
     "nuxt": "^3.13.2",
-    "nuxt-socket-io": "^3.0.13",
-    "nuxt3-socket.io": "^0.3.1",
     "sass": "^1.80.2",
     "sst": "^3.2.30",
     "vue": "^3.5.0",
