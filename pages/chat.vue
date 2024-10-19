@@ -2,7 +2,7 @@
     <div class="content">
         <div class="user-container">
             <h2 class="mb-3">Users</h2>
-            <span class="sidebar-user" v-for="name in usernames">
+            <span :class="`sidebar-user ${name == store.username ? 'active' : ''}`" v-for="name in usernames">
                 <Avatar :username="name" active />
                 <p class="ml-3">{{ name }}</p>
             </span>
@@ -33,7 +33,7 @@ import Avatar from '~/components/Avatar.vue'
 import { ref } from 'vue'
 import { useHead } from '@unhead/vue'
 
-useHead({ title: 'NuxtChat' })
+useHead({ title: 'NuxtChat - ' + store.username })
 watchEffect(() => {
     if (store.username == '') navigateTo('/')
 })
@@ -50,14 +50,12 @@ onMounted(() => {
 })
 
 let usernames = ref([]);
-watch([data, users], async () => {
-    let temp = [store.username]
-    if (users.value.length > 0) {
-        temp = temp.concat(...users.value)
-    } else {
-        temp = temp.concat(...data.value)
-    }
-    usernames.value = [...new Set(temp.sort())]
+watch([users], async () => {
+    if (users.value.length == 0) return;
+    usernames.value = [...new Set([store.username, ...users.value].sort())]
+});
+watch([data], async () => {
+    usernames.value = [...new Set([store.username, ...data.value].sort())]
 });
 
 const inputValue = ref('')
@@ -92,7 +90,6 @@ input {
     display: flex;
     height: calc(100vh - 84px);
     margin: 0 auto;
-    border: 1px solid #ccc;
 
     width: 100%;
     color: darkslategray;
@@ -100,18 +97,36 @@ input {
 
 .user-container {
     min-width: 15rem;
-    background-color: white;
+    background-color: rgb(250, 250, 250);
     border-right: 1px solid #ccc;
-    padding: 1rem 1rem 1rem 5rem;
+    padding: 1rem 0 1rem 0;
 
     h2 {
+        margin-left: 5rem;
         font-weight: bold;
     }
 
     .sidebar-user {
         display: flex;
         align-items: center;
+        padding-left: 5rem;
         margin-bottom: .5rem;
+        padding-top: .5rem;
+        border-top: rgba(119, 119, 119, 0.073) solid 2px;
+
+        &:last-of-type {
+            padding-bottom: .5rem;
+            border-bottom: rgba(119, 119, 119, 0.073) solid 2px;
+        }
+
+        &.active {
+            background-color: rgba(238, 238, 238, 0.355);
+
+            p {
+                color: #00b86b;
+                font-size: large;
+            }
+        }
 
         img {
             border: #00dc82 solid 3px !important;
@@ -139,8 +154,9 @@ input {
 
     .textbox {
         display: flex;
-        border-top: 1px solid #ccc;
+        border-top: 1px solid #0f1729;
         padding: 20px;
+        background-color: #0f1729;
 
         .text-input {
             width: 100%;

@@ -58,7 +58,7 @@ const formattedDate = ref(new Intl.DateTimeFormat('en-US', {
 }).format(props.dateCreated ?? new Date()))
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .chat-box {
     display: flex;
     align-items: flex-start;

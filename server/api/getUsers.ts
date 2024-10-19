@@ -1,9 +1,9 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { Resource } from "sst";
+// import { Resource } from "sst";
 import scanTable from "~/utils/scanTable";
 
-// const DB_NAME = "vjschat-production-ConnectionsTable";
-const DB_NAME = Resource.Connections.name;
+const DB_NAME = "vjschat-production-ConnectionsTable";
+// const DB_NAME = Resource.Connections.name;
 
 export default defineEventHandler(async () => {
   const dynamoClient = new DynamoDBClient();

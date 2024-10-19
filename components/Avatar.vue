@@ -3,8 +3,6 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
 const props = defineProps({
     username: {
         type: String,
@@ -17,7 +15,7 @@ const props = defineProps({
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .avatar {
     background-color: white;
     border: #0f172929 solid 1px;

@@ -3,19 +3,21 @@
         <p class="logo-text"><img id="header-icon" src="/favicon.ico" alt="" />Nuxt<span>Chat</span></p>
         <div class="user-section flex" v-if="store.activeSession">
             <UAvatar style="background-color: white;" :src="`https://robohash.org/${store.username}`" alt="Avatar" />
-            <div @click="toggleDropdown">
-                <p class="ml-2 self-center">{{ store.username }}</p>
-                <UIcon id="dropdown-icon"
-                    :name="isDropdownActive ? 'i-heroicons-chevron-up-20-solid' : 'i-heroicons-chevron-down-20-solid'"
-                    class="w-5 h-5 ml-2 color-white" />
-            </div>
-            <div id="dropdown-section" :class="isDropdownActive ? 'active' : ''">
-                <UButton @click="handleLogout">logout</UButton>
-            </div>
+            <UDropdown class="ml-3" :items="[[{
+                label: 'Logout',
+                icon: 'i-heroicons-power-20-solid',
+                click: handleLogout
+            }]]" :popper="{ placement: 'bottom-start' }">
+                <div>
+                    <p class="self-center">{{ store.username }}</p>
+                    <UIcon id="dropdown-icon" name="i-heroicons-chevron-down-20-solid"
+                        class="w-5 h-5 ml-2 color-white" />
+                </div>
+            </UDropdown>
         </div>
     </div>
     <NuxtLoadingIndicator />
-    <slot />
+    <slot></slot>
 </template>
 
 <script setup>
@@ -24,9 +26,6 @@ import { ref } from 'vue';
 
 const isDropdownActive = ref(false)
 
-const toggleDropdown = () => {
-    isDropdownActive.value = !isDropdownActive.value
-}
 const handleLogout = () => {
     isDropdownActive.value = false
     navigateTo('/')
@@ -63,28 +62,5 @@ const handleLogout = () => {
 
 #header-icon {
     width: 40px;
-}
-
-#dropdown-icon {
-    transition: all 1s ease-in-out;
-}
-
-#dropdown-section {
-    position: absolute;
-    width: 8rem;
-    background-color: white;
-    transform: translateY(3rem);
-    display: none;
-    padding: .5rem;
-    border-radius: 10px;
-    transition: all 1s ease-in-out;
-
-    &.active {
-        display: block;
-    }
-
-    button {
-        width: 100%;
-    }
 }
 </style>
